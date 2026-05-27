@@ -1,7 +1,8 @@
 package com.example.ss13;
 
-import com.example.employeemanagement.model.Employee;
+import com.example.EmployeeController.model.Employee;
 import com.example.employeemanagement.service.EmployeeService;
+import com.example.ss13.controller.EmployeeController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 
