@@ -23,7 +23,7 @@ public class LoggingAspect {
     /**
      * Before Advice: Log tên method trong Controller trước khi thực thi
      */
-    @Before("execution(* com.example.employeemanagement.controller.*.*(..))")
+    @Before("execution(* com.example.ss13.controller.*.*(..))")
     public void logBeforeController(JoinPoint joinPoint) {
         String methodName = joinPoint.getSignature().getName();
         logger.info(" [CONTROLLER] Method {} is being called", methodName);
@@ -32,7 +32,7 @@ public class LoggingAspect {
     /**
      * Around Advice: Đo thời gian thực thi của Controller
      */
-    @Around("execution(* com.example.employeemanagement.controller.*.*(..))")
+    @Around("execution(* com.example.ss13.controller.*.*(..))")
     public Object logExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
         long startTime = System.currentTimeMillis();
 
@@ -49,10 +49,10 @@ public class LoggingAspect {
     /**
      * AfterReturning Advice: Log kết quả trả về từ Service
      */
-    @AfterReturning(pointcut = "execution(* com.example.employeemanagement.service.*.*(..))",
+    @AfterReturning(pointcut = "execution(* com.example.ss13.service.*.*(..))",
             returning = "result")
     public void logAfterService(JoinPoint joinPoint, Object result) {
         String methodName = joinPoint.getSignature().getName();
-        logger.debug("✅ [SERVICE] Method {} returned: {}", methodName, result);
+        logger.debug("[SERVICE] Method {} returned: {}", methodName, result);
     }
 }

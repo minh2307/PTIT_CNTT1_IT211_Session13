@@ -27,17 +27,14 @@ public class EmployeeServiceImpl implements EmployeeService {
         return repository.findById(id)
                 .orElseThrow(() -> {
                     log.warn("Employee not found with id: {}", id);
-                    return new RuntimeException("Employee not found with id: " + id);
+                    return new RuntimeException("Employee not found");
                 });
     }
 
     @Override
     public Employee addEmployee(Employee employee) {
         validateEmployee(employee);
-        if (employee.getId() == null) {
-            throw new IllegalArgumentException("ID must not be null");
-        }
-        if (repository.existsById(employee.getId())) {
+        if (employee.getId() != null && repository.existsById(employee.getId())) {
             throw new IllegalArgumentException("Employee with id " + employee.getId() + " already exists");
         }
         Employee saved = repository.save(employee);
@@ -49,7 +46,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Employee updateEmployee(Long id, Employee employee) {
         if (!repository.existsById(id)) {
             log.warn("Update failed - employee not found with id: {}", id);
-            throw new RuntimeException("Employee not found with id: " + id);
+            throw new RuntimeException("Employee not found");
         }
         validateEmployee(employee);
         employee.setId(id);
@@ -62,7 +59,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public void deleteEmployee(Long id) {
         if (!repository.existsById(id)) {
             log.warn("Delete failed - employee not found with id: {}", id);
-            throw new RuntimeException("Employee not found with id: " + id);
+            throw new RuntimeException("Employee not found");
         }
         repository.deleteById(id);
         log.info("Deleted employee with id: {}", id);
