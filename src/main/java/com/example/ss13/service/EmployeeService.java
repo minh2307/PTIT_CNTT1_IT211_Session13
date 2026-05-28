@@ -1,6 +1,6 @@
 package com.example.ss13.service;
 
-import com.example.ss13.model.Entity.Employee;
+import com.example.ss13.model.Employee;
 
 import java.util.List;
 

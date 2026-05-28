@@ -1,6 +1,7 @@
 package com.example.ss13.service;
 
-import com.example.ss13.model.Entity.Employee;
+import com.example.ss13.exception.EmployeeNotFoundException;
+import com.example.ss13.model.Employee;
 import com.example.ss13.repository.EmployeeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,19 +28,15 @@ public class EmployeeServiceImpl implements EmployeeService {
         return repository.findById(id)
                 .orElseThrow(() -> {
                     log.warn("Employee not found with id: {}", id);
-                    return new RuntimeException("Employee not found with id: " + id);
+                    return new EmployeeNotFoundException("Employee not found with id: " + id);
                 });
     }
 
     @Override
     public Employee addEmployee(Employee employee) {
         validateEmployee(employee);
-        if (employee.getId() == null) {
-            throw new IllegalArgumentException("ID must not be null");
-        }
-        if (repository.existsById(employee.getId())) {
-            throw new IllegalArgumentException("Employee with id " + employee.getId() + " already exists");
-        }
+        // Reset ID to null to let J2/H2 DB auto-generate the ID
+        employee.setId(null);
         Employee saved = repository.save(employee);
         log.info("Added new employee: {}", saved);
         return saved;
@@ -49,11 +46,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Employee updateEmployee(Long id, Employee employee) {
         if (!repository.existsById(id)) {
             log.warn("Update failed - employee not found with id: {}", id);
-            throw new RuntimeException("Employee not found with id: " + id);
+            throw new EmployeeNotFoundException("Employee not found with id: " + id);
         }
         validateEmployee(employee);
         employee.setId(id);
-        Employee updated = repository.update(employee);
+        Employee updated = repository.save(employee);
         log.info("Updated employee: {}", updated);
         return updated;
     }
@@ -62,7 +59,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public void deleteEmployee(Long id) {
         if (!repository.existsById(id)) {
             log.warn("Delete failed - employee not found with id: {}", id);
-            throw new RuntimeException("Employee not found with id: " + id);
+            throw new EmployeeNotFoundException("Employee not found with id: " + id);
         }
         repository.deleteById(id);
         log.info("Deleted employee with id: {}", id);

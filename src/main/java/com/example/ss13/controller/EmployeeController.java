@@ -1,6 +1,6 @@
 package com.example.ss13.controller;
 
-import com.example.ss13.model.Entity.Employee;
+import com.example.ss13.model.Employee;
 import com.example.ss13.service.EmployeeService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
